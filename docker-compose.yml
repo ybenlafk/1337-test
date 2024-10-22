@@ -4,8 +4,8 @@ services:
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1337FIL
-      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: YAHYA1337
+      POSTGRES_DB: mydb
     ports:
       - "5432:5432"
     networks:
@@ -23,7 +23,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: "postgresql://postgres:1337FIL@db:5432/mydatabase"
+      DATABASE_URL: "postgresql://postgres:YAHYA1337@db:5432/mydb"
     depends_on:
       db:
         condition: service_healthy
