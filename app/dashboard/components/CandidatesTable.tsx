@@ -5,14 +5,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Candidate } from "@/app/types/types";
 
+const fadeIn = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+};
+
 const CandidatesTable = ({
   candidates,
   isLoading,
-  fadeIn,
 }: {
   candidates: Candidate[];
   isLoading: boolean;
-  fadeIn: any;
 }) => (
   <motion.div
     initial="initial"

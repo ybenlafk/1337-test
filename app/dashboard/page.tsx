@@ -9,12 +9,6 @@ import MetricCard from "./components/MetricCard";
 import CandidatesTable from "./components/CandidatesTable";
 import axios from "axios";
 
-const fadeIn = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 },
-};
-
 const staggeredContainer = {
   animate: {
     transition: {
@@ -63,6 +57,7 @@ export default function DashboardPage() {
     fetchDashboardData();
     const interval = setInterval(fetchDashboardData, 30000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -121,7 +116,6 @@ export default function DashboardPage() {
         <CandidatesTable
           candidates={candidates}
           isLoading={isLoading}
-          fadeIn={fadeIn}
         />
       </div>
     </motion.div>

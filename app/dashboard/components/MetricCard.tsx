@@ -4,6 +4,12 @@ import { Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 
+const fadeIn = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+};
+
 const MetricCard = ({
   icon,
   value,
@@ -11,7 +17,6 @@ const MetricCard = ({
   change,
   isLoading,
   delay = 0,
-  fadeIn,
 }: {
   icon: React.ReactNode;
   value: number;
@@ -19,7 +24,6 @@ const MetricCard = ({
   change: string;
   isLoading?: boolean;
   delay?: number;
-  fadeIn?: any;
 }) => (
   <motion.div
     initial="initial"
