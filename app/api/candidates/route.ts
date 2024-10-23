@@ -10,9 +10,9 @@ export async function GET() {
 
 // POST /api/candidates
 export async function POST(request: Request) {
-  const { name, email } = await request.json();
+  const { name, email, skills } = await request.json();
   const newCandidate = await prisma.candidate.create({
-    data: { name, email },
+    data: { name, email, skills },
   });
   return NextResponse.json(newCandidate);
 }

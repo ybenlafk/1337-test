@@ -1,17 +1,28 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import { ChevronLeft, Loader2, User, Mail, CheckCircle } from "lucide-react";
+import {
+  ChevronLeft,
+  Loader2,
+  User,
+  Mail,
+  CheckCircle,
+  X,
+  Tag,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Page() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [skills, setSkills] = useState<string[]>([]);
+  const [currentSkill, setCurrentSkill] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { toast } = useToast();
@@ -22,22 +33,36 @@ function Page() {
     exit: { opacity: 0, y: -20 },
   };
 
+  const handleAddSkill = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && currentSkill.trim()) {
+      e.preventDefault();
+      if (!skills.includes(currentSkill.trim())) {
+        setSkills([...skills, currentSkill.trim()]);
+      }
+      setCurrentSkill("");
+    }
+  };
+
+  const handleRemoveSkill = (skillToRemove: string) => {
+    setSkills(skills.filter((skill) => skill !== skillToRemove));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim() && email.trim()) {
       setIsSubmitting(true);
       try {
-        await axios.post("/api/candidates", { name, email });
+        await axios.post("/api/candidates", { name, email, skills });
         setSubmitted(true);
         toast({
           title: "Success!",
           description: `${name} has been successfully added to the system.`,
         });
 
-        // Reset form after delay for animation
         setTimeout(() => {
           setName("");
           setEmail("");
+          setSkills([]);
           setSubmitted(false);
         }, 2000);
       } catch (error) {
@@ -53,7 +78,7 @@ function Page() {
     } else {
       toast({
         title: "Error",
-        description: "Please fill in all fields.",
+        description: "Please fill in all required fields.",
         variant: "destructive",
       });
     }
@@ -155,6 +180,55 @@ function Page() {
               initial="initial"
               animate="animate"
               transition={{ delay: 0.5 }}
+              className="space-y-2"
+            >
+              <Label htmlFor="skills" className="flex items-center gap-2">
+                <Tag className="h-4 w-4" />
+                Skills
+              </Label>
+              <div className="space-y-2">
+                <div className="flex flex-wrap gap-2">
+                  <AnimatePresence>
+                    {skills.map((skill) => (
+                      <motion.div
+                        key={skill}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                      >
+                        <Badge
+                          variant="secondary"
+                          className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100 flex items-center gap-1"
+                        >
+                          {skill}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSkill(skill)}
+                            className="hover:text-blue-600 dark:hover:text-blue-300"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+                <Input
+                  id="skills"
+                  placeholder="Type a skill and press Enter"
+                  value={currentSkill}
+                  onChange={(e) => setCurrentSkill(e.target.value)}
+                  onKeyDown={handleAddSkill}
+                  className="mt-2"
+                />
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={fadeIn}
+              initial="initial"
+              animate="animate"
+              transition={{ delay: 0.6 }}
               className="flex justify-between"
             >
               <motion.div
